@@ -10,8 +10,13 @@ class Student(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     roll = models.IntegerField(unique=True)
-    grade = models.IntegerField()
-    section = models.CharField(max_length=64, default=None, null=True, blank=True)
+    student_class = models.ForeignKey(
+        "Class",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="students",
+        db_column="class",
+    )
     subjects = models.ManyToManyField("Subject", through="StudentSubject")
 
     def __str__(self):
@@ -83,3 +88,18 @@ class StudentSubject(models.Model):
 
     def __str__(self) -> str:
         return f"{self.student} - {self.subject}"
+
+
+class Class(models.Model):
+    graduation_year = models.IntegerField()
+    class_teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    grade = models.IntegerField()
+    section = models.CharField(max_length=64, default=None, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint("grade", "section", name="unique_class"),
+        ]
+
+    def __str__(self):
+        return f"Class of {self.graduation_year}"

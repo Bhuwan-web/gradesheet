@@ -13,6 +13,11 @@ class StudentSubjectAdmin(admin.ModelAdmin):
     )
 
 
+class StudentInline(admin.TabularInline):
+    model = models.Student
+    extra = 3
+
+
 class SubjectInline(admin.TabularInline):
     model = models.Subject
     extra = 3
@@ -34,7 +39,15 @@ class SubjectAdmin(admin.ModelAdmin):
     )
 
 
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ("graduation_year", "grade", "class_teacher__name")
+
+    inlines = [StudentInline]
+
+
 admin.site.register(models.Student)
 admin.site.register(models.Subject, SubjectAdmin)
 admin.site.register(models.Teacher, TeacherAdmin)
 admin.site.register(models.StudentSubject, StudentSubjectAdmin)
+admin.site.register(models.Marks)
+admin.site.register(models.Class, ClassAdmin)
