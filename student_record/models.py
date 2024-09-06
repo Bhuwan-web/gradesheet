@@ -24,10 +24,11 @@ class Student(models.Model):
 
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return f"{self.first_name} {self.last_name}"
 
 
 class Marks(models.Model):
@@ -61,6 +62,7 @@ class StudentSubject(models.Model):
     th = models.FloatField(
         _("Theory Marks"),
         validators=[MinValueValidator(0)],
+        default=0,
     )
     pr = models.FloatField(
         _("Practical Marks"),
@@ -102,4 +104,4 @@ class Class(models.Model):
         ]
 
     def __str__(self):
-        return f"Class of {self.graduation_year}"
+        return f"{self.graduation_year} - {self.grade}'{self.section}'"

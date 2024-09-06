@@ -24,14 +24,13 @@ class SubjectInline(admin.TabularInline):
 
 
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ("name",)
     inlines = [SubjectInline]
 
 
 class SubjectAdmin(admin.ModelAdmin):
     list_display = (
         "subject_code",
-        "teacher__name",
+        "teacher",
         "name",
         "marks__theory",
         "marks__practical",
@@ -40,7 +39,7 @@ class SubjectAdmin(admin.ModelAdmin):
 
 
 class ClassAdmin(admin.ModelAdmin):
-    list_display = ("graduation_year", "grade", "class_teacher__name")
+    list_display = ("graduation_year", "grade", "section", "class_teacher")
 
     inlines = [StudentInline]
 
