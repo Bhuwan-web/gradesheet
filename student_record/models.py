@@ -1,4 +1,3 @@
-from uuid import uuid4
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -26,13 +25,24 @@ class Teacher(models.Model):
         return self.name
 
 
+class Marks(models.Model):
+    theory = models.FloatField(validators=[MinValueValidator(0)])
+    practical = models.FloatField(
+        default=None, null=True, blank=True, validators=[MinValueValidator(0)]
+    )
+
+    def __str__(self) -> str:
+        return (
+            f"TH: {self.theory}, PR:{self.practical}"
+            if self.practical
+            else f"TH: {self.theory}"
+        )
+
+
 class Subject(models.Model):
     subject_code = models.CharField(max_length=64, unique=True)
     name = models.CharField(max_length=100)
-    theory_marks = models.FloatField(validators=[MinValueValidator(0)])
-    practical_marks = models.FloatField(
-        default=None, null=True, blank=True, validators=[MinValueValidator(0)]
-    )
+    marks = models.ForeignKey(Marks, on_delete=models.CASCADE)
     credit_hours = models.FloatField()
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
@@ -67,8 +77,8 @@ class StudentSubject(models.Model):
             raise InvalidScoreError("Obtained Marks cannot be greater than Total Marks")
 
     def clean(self) -> None:
-        self.validate_marks(self.th, self.subject.theory_marks)
-        self.validate_marks(self.pr, self.subject.practical_marks)
+        self.validate_marks(self.th, self.subject.marks.theory)
+        self.validate_marks(self.pr, self.subject.marks.practical)
         return super().clean()
 
     def __str__(self) -> str:

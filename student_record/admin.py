@@ -28,8 +28,8 @@ class SubjectAdmin(admin.ModelAdmin):
         "subject_code",
         "teacher__name",
         "name",
-        "theory_marks",
-        "practical_marks",
+        "marks__theory",
+        "marks__practical",
         "credit_hours",
     )
 
