@@ -33,5 +33,20 @@ class StudentSerializer(serializers.ModelSerializer):
             "roll",
             "student_class",
             "subjects",
-            "studentsubject_set",
+            "scores",
+        ]
+
+
+class StudentMarksEntrySerializer(serializers.ModelSerializer):
+    scores = ListStudentSubjectSerializer(many=True)
+    roll = serializers.IntegerField()
+
+    class Meta:
+        model = Student
+        fields = [
+            "first_name",
+            "last_name",
+            "roll",
+            "student_class",
+            "scores",
         ]

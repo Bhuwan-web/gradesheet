@@ -74,20 +74,29 @@ class StudentSubject(models.Model):
         default=None,
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint("subject", "student", name="unique_student_subject")
+        ]
+
     def total_marks(self):
         if self.pr:
             return self.th + self.pr
         return self.th
 
-    def validate_marks(self, obtain, total):
-        if total and not obtain:
-            raise InvalidScoreError("Obtained Marks cannot be empty")
+    def validate_marks(self, obtain, total, source):
+        if total and obtain is None:
+            raise InvalidScoreError(f"Obtained Marks cannot be empty for {source}.")
+        if not total and obtain:
+            raise InvalidScoreError(f"Subject has no {source} marks.")
         if all([obtain, total]) and obtain > total:
-            raise InvalidScoreError("Obtained Marks cannot be greater than Total Marks")
+            raise InvalidScoreError(
+                f"{source.title()}: Obtained Marks cannot be greater than Total Marks"
+            )
 
     def clean(self) -> None:
-        self.validate_marks(self.th, self.subject.marks.theory)
-        self.validate_marks(self.pr, self.subject.marks.practical)
+        self.validate_marks(self.th, self.subject.marks.theory, "theory")
+        self.validate_marks(self.pr, self.subject.marks.practical, "practical")
         return super().clean()
 
     def __str__(self) -> str:
