@@ -538,7 +538,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="2qvcOWGBDOMqWSujJLUs-129" value="Elective" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;strokeColor=#0F8B8D;backgroundOutline=1;rounded=1;labelBackgroundColor=none;fillColor=#FAE5C7;fontColor=#143642;" vertex="1" collapsed="1" parent="1">
-          <mxGeometry x="445" y="610" width="80" height="30" as="geometry">
+          <mxGeometry x="310" y="770" width="80" height="30" as="geometry">
             <mxRectangle x="790" y="720" width="250" height="100" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -613,7 +613,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="2qvcOWGBDOMqWSujJLUs-155" value="ClassElective    " style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;strokeColor=#0F8B8D;backgroundOutline=1;rounded=1;labelBackgroundColor=none;fillColor=#FAE5C7;fontColor=#143642;" vertex="1" collapsed="1" parent="1">
-          <mxGeometry x="80" y="800" width="130" height="30" as="geometry">
+          <mxGeometry x="-90" y="900" width="130" height="30" as="geometry">
             <mxRectangle x="290" y="860" width="250" height="130" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
