@@ -76,7 +76,7 @@ class ClassMarksEntry(serializers.ModelSerializer):
             class_obj = instance
             for student_data in students_data:
                 scores = student_data.pop("scores")
-                student_data["student_class"] = class_obj
+                student_data["class_id"] = class_obj
                 student_obj = self.get_or_create_student_instance(student_data)
                 for score in scores:
                     subject_data = score.pop("subject")

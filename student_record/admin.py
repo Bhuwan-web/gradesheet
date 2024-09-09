@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . import models
+from student_record.models import students, classes, subjects, teachers
 # Register your models here.
 
 
@@ -14,12 +14,12 @@ class StudentSubjectAdmin(admin.ModelAdmin):
 
 
 class StudentInline(admin.TabularInline):
-    model = models.Student
+    model = students.Student
     extra = 3
 
 
 class SubjectInline(admin.TabularInline):
-    model = models.Subject
+    model = subjects.Subject
     extra = 3
 
 
@@ -38,15 +38,32 @@ class SubjectAdmin(admin.ModelAdmin):
     )
 
 
+class ClassSubjectInline(admin.StackedInline):
+    model = classes.ClassSubject
+    extra = 3
+
+
 class ClassAdmin(admin.ModelAdmin):
     list_display = ("graduation_year", "grade", "section", "class_teacher")
 
-    inlines = [StudentInline]
+    inlines = [ClassSubjectInline, StudentInline]
 
 
-admin.site.register(models.Student)
-admin.site.register(models.Subject, SubjectAdmin)
-admin.site.register(models.Teacher, TeacherAdmin)
-admin.site.register(models.StudentSubject, StudentSubjectAdmin)
-admin.site.register(models.Marks)
-admin.site.register(models.Class, ClassAdmin)
+class StudentSubjectClassInline(admin.TabularInline):
+    model = students.StudentSubject
+    extra = 3
+
+
+class StudentAdmin(admin.ModelAdmin):
+    inlines = [StudentSubjectClassInline]
+
+    list_display = ("first_name", "last_name", "roll", "class_id")
+
+
+admin.site.register(students.Student, StudentAdmin)
+admin.site.register(subjects.Subject, SubjectAdmin)
+admin.site.register(teachers.Teacher, TeacherAdmin)
+admin.site.register(students.StudentSubject, StudentSubjectAdmin)
+admin.site.register(subjects.Marks)
+admin.site.register(classes.Class, ClassAdmin)
+admin.site.register(classes.ClassSubject)

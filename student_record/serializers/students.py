@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from student_record.models import Student, Subject
+from student_record.models.students import Student, Subject
 from student_record.serializers.student_subjects import (
     ListStudentSubjectSerializer,
     StudentSubjectSerializer,
@@ -31,7 +31,7 @@ class StudentSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "roll",
-            "student_class",
+            "class_id",
             "subjects",
             "scores",
         ]
@@ -47,6 +47,6 @@ class StudentMarksEntrySerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "roll",
-            "student_class",
+            "class_id",
             "scores",
         ]

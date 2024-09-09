@@ -22,8 +22,8 @@ class Class(models.Model):
 
 
 class ClassSubject(models.Model):
-    class_ = models.ForeignKey(Class, verbose_name="class", on_delete=models.CASCADE)
+    class_id = models.ForeignKey(Class, verbose_name="class", on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.class_} - {self.subject}"
+        return f"{self.class_id} - {self.subject}"

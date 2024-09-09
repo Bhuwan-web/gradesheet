@@ -1,16 +1,17 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from student_record.models.classes import Class, ClassSubject
+
+from student_record.errors import InvalidScoreError, InvalidSubjectError
+from student_record.models.classes import Class
 from student_record.models.subjects import Subject
-from student_record.errors import InvalidScoreError
 
 
 class Student(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     roll = models.IntegerField(unique=True)
-    student_class = models.ForeignKey(
+    class_id = models.ForeignKey(
         Class,
         on_delete=models.CASCADE,
         null=True,
@@ -27,7 +28,7 @@ class StudentSubject(models.Model):
     student = models.ForeignKey(
         Student, on_delete=models.CASCADE, related_name="scores"
     )
-    class_subject = models.ForeignKey(ClassSubject, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     th = models.FloatField(
         _("Theory Marks"),
         validators=[MinValueValidator(0)],
@@ -61,10 +62,17 @@ class StudentSubject(models.Model):
                 f"{source.title()}: Obtained Marks cannot be greater than Total Marks"
             )
 
+    def validate_subject(self):
+        if self.subject not in self.student.class_id.subjects.all():
+            raise InvalidSubjectError(
+                "Invalid Subject. Add Subject associated with particular class."
+            )
+
     def clean(self) -> None:
-        subject_marks = self.class_subject.subject.marks
+        subject_marks = self.subject.marks
         self.validate_marks(self.th, subject_marks.theory, "theory")
         self.validate_marks(self.pr, subject_marks.practical, "practical")
+        self.validate_subject()
         return super().clean()
 
     def __str__(self) -> str:
