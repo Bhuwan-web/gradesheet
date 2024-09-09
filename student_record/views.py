@@ -1,4 +1,3 @@
-from operator import ge
 import django_filters
 from rest_framework import generics
 from django.db.models import Prefetch

@@ -80,7 +80,7 @@ WSGI_APPLICATION = "gradesheet.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "grade_sheet_db",
+        "NAME": "gradesheet_db",
         "USER": "bhuwan",
         "PASSWORD": "123456",
         "HOST": "127.0.0.1",
