@@ -472,7 +472,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="2qvcOWGBDOMqWSujJLUs-155" value="ClassElective    " style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;strokeColor=#0F8B8D;backgroundOutline=0;rounded=1;labelBackgroundColor=none;fillColor=#FAE5C7;fontColor=#143642;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;shadow=0;snapToPoint=1;fixDash=0;comic=0;linejoin=arcs;linecap=square;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="512" y="-337" width="250" height="120" as="geometry">
+          <mxGeometry x="512" y="-336" width="250" height="120" as="geometry">
             <mxRectangle x="853" y="260" width="130" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
