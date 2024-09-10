@@ -1,4 +1,5 @@
-from django.db import models
+from typing import Iterable
+from django.db import models, transaction
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
@@ -13,6 +14,7 @@ class Student(models.Model):
     roll = models.IntegerField(unique=True)
     class_id = models.ForeignKey(
         Class,
+        verbose_name="class",
         on_delete=models.CASCADE,
         null=True,
         related_name="students",
@@ -22,6 +24,11 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+        subjects = self.class_id.subjects.filter(is_elective=False)
+        self.subject_scores.add(*subjects)
 
 
 class StudentSubject(models.Model):
@@ -54,7 +61,7 @@ class StudentSubject(models.Model):
 
     def validate_marks(self, obtain, total, source):
         if total and obtain is None:
-            raise InvalidScoreError(f"Obtained Marks cannot be empty for {source}.")
+            obtain = 0
         if not total and obtain:
             raise InvalidScoreError(f"Subject has no {source} marks.")
         if all([obtain, total]) and obtain > total:

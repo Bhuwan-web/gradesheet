@@ -23,14 +23,7 @@ class Subject(models.Model):
     marks = models.ForeignKey(Marks, on_delete=models.CASCADE)
     credit_hours = models.FloatField()
     is_elective = models.BooleanField(default=False)
-    elective_group = models.ForeignKey(
-        "ElectiveSubjectGroup", on_delete=models.CASCADE, null=True
-    )
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}({self.subject_code})"
-
-
-class ElectiveSubjectGroup(models.Model):
-    name = models.CharField(max_length=100)
