@@ -3,17 +3,34 @@ from django.core.validators import MinValueValidator
 from student_record.models.teachers import Teacher
 
 
+# create a model for pass and full marks that will relate to marks model
+class MarksClassification(models.Model):
+    pass_marks = models.FloatField(validators=[MinValueValidator(0)])
+    full_marks = models.FloatField(validators=[MinValueValidator(0)])
+
+    def __str__(self) -> str:
+        return f"{self.full_marks}:{self.pass_marks}"
+
+
 class Marks(models.Model):
-    theory = models.FloatField(validators=[MinValueValidator(0)])
-    practical = models.FloatField(
-        default=None, null=True, blank=True, validators=[MinValueValidator(0)]
+    theory = models.ForeignKey(
+        MarksClassification,
+        on_delete=models.CASCADE,
+        related_name="theory",
+    )
+    practical = models.ForeignKey(
+        MarksClassification,
+        on_delete=models.CASCADE,
+        related_name="practical",
+        null=True,
+        blank=True,
     )
 
     def __str__(self) -> str:
         return (
-            f"TH: {self.theory}, PR:{self.practical}"
+            f"TH - {self.theory} / PR -{self.practical}"
             if self.practical
-            else f"TH: {self.theory}"
+            else f"TH - {self.theory}"
         )
 
 

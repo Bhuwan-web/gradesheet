@@ -1,8 +1,9 @@
 from django.urls import path
 
-from . import views
+from student_record.views.marksheets import CreateMarkLedger
 
 urlpatterns = [
+    path("mark-ledger/", CreateMarkLedger.as_view(), name="mark-ledger"),
     # path("subjects/", views.ListCreateSubject.as_view(), name="subject"),
     # path("teachers/", views.ListCreateTeacher.as_view(), name="teacher"),
     # path("students/", views.ListCreateStudent.as_view(), name="student"),

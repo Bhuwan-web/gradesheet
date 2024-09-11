@@ -1,4 +1,5 @@
 from django.contrib import admin
+from student_record.marksheet_admin_view import MarkSheetForm
 from student_record.models import students, classes, subjects, teachers, electives
 # Register your models here.
 
@@ -74,6 +75,42 @@ class ElectiveSubjectInline(admin.TabularInline):
     model = electives.ElectiveSubject
 
 
+# class MarkSheetAdmin(admin.ModelAdmin):
+#     list_display = ("student", "class_id", "percentage", "status")
+#     list_filter = ("status", "class_id")
+#     readonly_fields = ("percentage", "status")
+#     ordering = ("student__roll",)
+#     form = MarkSheetForm
+#     fields = ("student", "class_id", "percentage", "status", "student_subjects")
+#     # fieldsets = (
+#     #     (
+#     #         "Summary",
+#     #         {"fields": ("student", "class_id", "percentage", "status", "subjects")},
+#     #     ),
+#     # )
+
+#     # inlines = [StudentSubjectClassInline]
+#     ...
+
+
+class MarkSheetAdmin(admin.ModelAdmin):
+    list_display = ("student", "class_id", "percentage", "status")
+    change_form_template = "admin/marksheet_change_form.html"
+
+    # Custom method to pass the subject-wise scores to the template
+    def render_change_form(self, request, context, *args, **kwargs):
+        obj = kwargs.get("obj")
+
+        if obj:
+            # Get all StudentSubject entries for the related student
+            student_subjects = students.StudentSubject.objects.filter(
+                student=obj.student
+            )
+            context["subject_scores"] = student_subjects  # Pass to the template
+
+        return super().render_change_form(request, context, *args, **kwargs)
+
+
 class ElectiveAdmin(admin.ModelAdmin):
     list_display = ("name",)
     inlines = [ElectiveSubjectInline]
@@ -87,3 +124,4 @@ admin.site.register(teachers.Teacher, TeacherAdmin)
 admin.site.register(subjects.Marks)
 admin.site.register(classes.Class, ClassAdmin)
 # admin.site.register(electives.ElectiveSubject, ElectiveSubjectAdmin)
+admin.site.register(students.MarkSheet, MarkSheetAdmin)

@@ -1,5 +1,4 @@
-from typing import Iterable
-from django.db import models, transaction
+from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
@@ -20,7 +19,7 @@ class Student(models.Model):
         related_name="students",
         db_column="class",
     )
-    subject_scores = models.ManyToManyField(Subject, through="StudentSubject")
+    subjects = models.ManyToManyField(Subject, through="StudentSubject")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -28,7 +27,7 @@ class Student(models.Model):
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
         subjects = self.class_id.subjects.filter(is_elective=False)
-        self.subject_scores.add(*subjects)
+        self.subjects.add(*subjects)
 
 
 class StudentSubject(models.Model):
@@ -48,6 +47,7 @@ class StudentSubject(models.Model):
         blank=True,
         default=None,
     )
+    total = models.FloatField(null=True, editable=False)
 
     class Meta:
         constraints = [
@@ -55,9 +55,7 @@ class StudentSubject(models.Model):
         ]
 
     def total_marks(self):
-        if self.pr:
-            return self.th + self.pr
-        return self.th
+        return self.th + self.pr if self.pr else self.th
 
     def validate_marks(self, obtain, total, source):
         if total and obtain is None:
@@ -82,5 +80,34 @@ class StudentSubject(models.Model):
         self.validate_subject()
         return super().clean()
 
+    def save(self, *args, **kwargs) -> None:
+        self.total = self.total_marks
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.student} - {self.subject}"
+
+
+class MarkSheet(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    class_id = models.ForeignKey(
+        Class, verbose_name=_("Class"), on_delete=models.CASCADE
+    )
+    exam_type = models.CharField(max_length=100, default="board")
+    total_marks = models.FloatField()
+    percentage = models.FloatField()
+    status = models.CharField(
+        max_length=100,
+        choices=[("PASS", "PASS"), ("FAIL", "FAIL")],
+    )
+    remarks = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{str(self.student)}:{self.percentage}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "class_id", "exam_type"], name="unique_marksheet"
+            )
+        ]

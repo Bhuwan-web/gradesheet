@@ -6,4 +6,4 @@ class StudentRecordConfig(AppConfig):
     name = "student_record"
 
     def ready(self):
-        import student_record.signals
+        import student_record.signals  # noqa: F401

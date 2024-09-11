@@ -22,7 +22,7 @@ class ElectiveStudentSubject(models.Model):
         return f"{self.student} - {self.elective_group}:{self.subject}"
 
     def clean(self) -> None:
-        self.student.subject_scores.add(self.subject)
+        self.student.subjects.add(self.subject)
         super().clean()
 
 
