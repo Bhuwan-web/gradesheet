@@ -1,7 +1,4 @@
 from django.contrib import admin
-from django.db.models.query import QuerySet
-from django.http import HttpRequest
-from student_record.marksheet_admin_view import MarkSheetForm
 from student_record.models import students, classes, subjects, teachers, electives
 # Register your models here.
 
