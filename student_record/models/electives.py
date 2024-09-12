@@ -16,7 +16,9 @@ class ElectiveGroup(models.Model):
 class ElectiveStudentSubject(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     elective_group = models.ForeignKey(ElectiveGroup, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    subject = models.ForeignKey(
+        Subject, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.student} - {self.elective_group}:{self.subject}"

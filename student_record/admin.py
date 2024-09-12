@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
 from student_record.marksheet_admin_view import MarkSheetForm
 from student_record.models import students, classes, subjects, teachers, electives
 # Register your models here.
@@ -27,6 +29,7 @@ class SubjectInline(admin.TabularInline):
 class ElectiveStudentSubjectInline(admin.TabularInline):
     model = electives.ElectiveStudentSubject
     extra = 3
+    readonly_fields = ("elective_group",)
     # collapse
     classes = {"collapse": True}
 
@@ -60,8 +63,9 @@ class ClassAdmin(admin.ModelAdmin):
 
 class StudentSubjectClassInline(admin.TabularInline):
     model = students.StudentSubject
-    extra = 3
-    classes = {"collapse": True}
+    extra = 0
+    readonly_fields = ("subject", "total")
+    fields = ("subject", "th", "pr", "total")
 
 
 class StudentAdmin(admin.ModelAdmin):
