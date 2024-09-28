@@ -93,7 +93,11 @@ class MarkSheet(models.Model):
     class_id = models.ForeignKey(
         Class, verbose_name=_("Class"), on_delete=models.CASCADE
     )
-    exam_type = models.CharField(max_length=100, default="board")
+    exam_type = models.CharField(
+        max_length=100,
+        choices=[("board", "Board"), ("terminal", "Terminal")],
+        default="board",
+    )
     total_marks = models.FloatField()
     percentage = models.FloatField()
     status = models.CharField(
